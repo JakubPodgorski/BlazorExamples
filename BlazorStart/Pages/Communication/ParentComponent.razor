@@ -1,0 +1,18 @@
+﻿@page "/parent" 
+<ChildComponent OnClick="ClickHandler" MyProperty="Value from parent"></ChildComponent>
+
+<p>@message</p>
+
+
+@code {
+
+  
+
+    string message = "Hello from ParentComponent";
+
+    void ClickHandler(string newMessage)
+    {
+        message = newMessage;
+    }
+
+}

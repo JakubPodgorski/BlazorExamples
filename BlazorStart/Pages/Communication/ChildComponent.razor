@@ -1,0 +1,15 @@
+﻿
+<div>Parameter from parent: @MyProperty</div>
+<div>Cascade parameter: @CascadeParam</div>
+
+<button @onclick="@(() => OnClick.InvokeAsync("Hello from ChildComponent"))">Click me</button>
+
+@code {
+
+    [Parameter] public EventCallback<string> OnClick { get; set; }
+    [CascadingParameter] public int CascadeParam { get; set; }
+
+    [Parameter]
+    public string MyProperty { get; set; }
+
+}

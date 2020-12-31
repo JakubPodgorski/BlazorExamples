@@ -1,0 +1,52 @@
+﻿@page "/js"
+@inject IJSRuntime JS
+
+<button @onclick="ShowPrompt">Show prompt</button>
+<button onclick="exampleJSFunctions.sayHelloCallerJS()">Run .NET from JS</button>
+
+<div id="welcome"></div>
+
+@if (wasSayHelloCalled)
+{
+    <p>C# method was called from JS 
+        @if (!string.IsNullOrEmpty(param)) 
+        { <p> with param @param </p> }
+        </p>
+}
+
+@code {
+
+    private static bool wasSayHelloCalled;
+    private static string param;
+    private static Action<string> action;
+
+    protected override void OnInitialized()
+    {
+        action = UpdateMessage;
+    }
+
+    private async Task ShowPrompt()
+    {
+        var name = await JS.InvokeAsync<string>(
+          "exampleJSFunctions.showPrompt",
+          "What's your name?");
+
+        await JS.InvokeVoidAsync(
+                "exampleJSFunctions.displayWelcome",
+                $"Hello {name}! Welcome to Blazor!");
+    }
+
+    [JSInvokable]
+    public static void SayHello(string text)
+    {
+        wasSayHelloCalled = true;
+        action?.Invoke(text);      
+    }
+
+    private void UpdateMessage(string message)
+    {
+        param = message;
+        StateHasChanged();
+    }
+
+}
